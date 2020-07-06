@@ -1,5 +1,5 @@
 # icommerce
-Simple online shopping application to sell products (backend only)
+Simple online shopping application to sell products (backend only).
 ## System Design
 
 ### 1. Requirement clarification
@@ -102,8 +102,17 @@ We need API Gateway for following reasons:
 - When user successfully authenticated, we use ZuulFilter to add custom HTTP Header "Username" to client request. We could extract more information from JWT token (like user group - ADMIN, USER...) and add them as HTTP Header but for simplicity, we skip it for now.
 #### Registry Service
 We use *spring-cloud-starter-netflix-eureka-server* to start Eureka Server for service registration and discovery in our system. It helps API Gateway routing requests by service name instead of hard-code URL. But if we deploy our system to Kubernetes, we don't need this anymore because Kubernetes provides Service discovery and load balancing out-of-box.
+
 #### Product Service
+- To simplify the setup, our product service will use embded H2 database.
+- To support customer filter, sort and search for products based on dynamic criterias, we have 2 options: *Spring Specification* and *QueryDSL*. Here we go with *QueryDSL* because it simplify the implementation.
+- To keep track all customer activity, we need to records all customer request parameters when client send GET request to our endpoint to view product detail or to filtering/sorting products. We use *Spring AOP* and define the PointCut to tell Spring which part of the code should be monitored, we also define Advice method to tell Spring how to record these parameters.
+- To make sure failure to store customer activity is completely transparent to customer and should have no impact to the activity itself, we use *Spring Async* to run our AOP Advice in a separate thread.
+- We use *Spring Cloud Stream* to send all customer activity data from Product Service to a message broker (to simplify the setup, here we use CloudAMQP - a cloud RabbitMQ service). In our case, Product Service acts as a message *Source*, and Audit Service acts as a message *Sink*. We don't want data will not be lost if Audit Service was temporary down, so we config queue as durable queue for guaranteed message delivery.
 #### Audit Service
+- Audit Service acts as a message Sink, it consumes and process message (message is customer activity in our case). And store to MongoDB.
 #### Shopping Cart Service
+- A simple CRUD service with *spring-boot-starter-data-redis* and backed by Redis.
 #### Order Service
+- A simple CRUD Service with *spring-boot-starter-data-rest* and backed by MongoDB. We use @RepositoryRestResource to expose resources without implementing controller/service.
 ### 5. Identifying and resolving bottlenecks
