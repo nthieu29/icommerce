@@ -42,23 +42,45 @@ The Product service stores information about all of our product. The storage req
 
 A relational database is appropriate in our case. For the simplicity of the assignment, we simplify the data schema like this:
 
-Schema
+![Product Schema](external-files/Product.png)
 
 
 #### Audit Service
 The Audit service listens for customer activities from the Product service. The storage requirements for the Audit service are:
 - Long-term storage.
-- Able to handle massive amount a data ()
+- Non-relational data.
+- Able to handle massive amount a data (read-heavy as we mentioned in Product section above).
+- Dynamic or flexible schema.
+
+A document-oriented database is appropriate, and MongoDB is good fit in our scenario. It also supports to store Geolocation data and build-in queries to query data based on location -> it could help us if we want to know something like customers in which city will interest on which products (maybe for Product Recommendation Service).
+
+We define the data schema like this:
+
+![Audit Schema](external-files/CustomerActivity.png)
+
 #### Shopping Cart Service
+The Shopping Cart service stores information about shopping cart of the customers. The storage requirements for the Shopping Cart Service are:
+- Short-term storage. Each customer will have their own shopping cart and only one shopping cart at the moment. After customer checkout, the shopping cart data will be cleared.
+- Need retrieve/lookup shopping cart data quickly and update shopping cart data quickly (for example, there are some big sale periods in a year like 11/11 and 12/12, a lot of customers come to our system and update their shopping cart data to make the order).
+- Support only 1 simple query: query by customer.
+
+The HashMap data structure (with the key is customer and the value is shopping cart data) seems meet our needs because the get and put operations take only constant time. But we will get the problem if the server running Shopping Cart Service goes down (we will lose all the shopping cart data of customers) or if we run many instances of Shopping Cart Service (we need to sync data between these instances). Redis could solve these problem easily and meets all our needs with its Hash Table high read-write performance with schema like this.
+
+        | Key (Customer) | Value (Shopping Cart data)       |
+        |--------------- |:--------------------------------:|
+        | Username       | List of Product and its quantity |
+        
+![Shopping Cart Schema](external-files/ShoppingCart.png)
+        
 #### Order Service
 The Order service stores information about all of our customer orders. The storage requirements for the Order are:
 - Long-term storage.
-- Able to handle a high volume of packages, requiring high write throughput (for example, we could have some big sale period in a year like 11/11 and 12/12, a lot of customers come to our system and make orders).
-- Support simple queries like query by Order ID, query by customer. No complex joins or requirements for referential integrity.
+- Able to handle a high volume of packages, requiring high write throughput (for example, there are some big sale periods in a year like 11/11 and 12/12, a lot of customers come to our system and make orders).
+- Support simple queries. No complex joins or requirements for referential integrity.
 
 Because the order data is simple and not relational, a document-oriented database is appropriate, and MongoDB can achieve high throughput and scale well in terms of volume of traffic or size of data (or both).
 
-Schema
+![Order Schema](external-files/Order.png)
 ### 4. Detailed design
 
 ### 5. Identifying and resolving bottlenecks
