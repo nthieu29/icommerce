@@ -66,9 +66,9 @@ The Shopping Cart service stores information about shopping cart of the customer
 
 The HashMap data structure (with the key is customer and the value is shopping cart data) seems meet our needs because the get and put operations take only constant time. But we will get the problem if the server running Shopping Cart Service goes down (we will lose all the shopping cart data of customers) or if we run many instances of Shopping Cart Service (we need to sync data between these instances). Redis could solve these problem easily and meets all our needs with its Hash Table high read-write performance with schema like this.
 
-        | Key (Customer) | Value (Shopping Cart data)       |
-        |--------------- |:--------------------------------:|
-        | Username       | List of Product and its quantity |
+| Key (Customer) | Value (Shopping Cart data)       |
+|--------------- |:--------------------------------:|
+| Username       | List of Product and its quantity |
         
 ![Shopping Cart Schema](external-files/ShoppingCart.png)
         
