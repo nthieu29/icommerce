@@ -1,8 +1,9 @@
 # icommerce
 Simple online shopping application to sell products (backend only).
+
 ## System Design
 
-### 1. Requirement clarification
+### 1. Requirements
 A small start-up named "iCommerce" wants to build a very simple online shopping application to sell their products. In order to get to the market quickly, they just want to build an MVP version with a very limited set of functionalities:
 a. The application is simply a simple web page that shows all products on which customers can filter, short and search for products based on different criteria such as name, price, brand, colour etc.
 
@@ -102,7 +103,7 @@ We need API Gateway for following reasons:
 - When user successfully authenticated, we use ZuulFilter to add custom HTTP Header "Username" to client request. We could extract more information from JWT token (like user group - ADMIN, USER...) and add them as HTTP Header but for simplicity, we skip it for now.
 #### Registry Service
 We use *spring-cloud-starter-netflix-eureka-server* to start Eureka Server for service registration and discovery in our system. It helps API Gateway routing requests by service name instead of hard-code URL. But if we deploy our system to Kubernetes, we don't need this anymore because Kubernetes provides Service discovery and load balancing out-of-box.
-
+![Kubernetes](external-files/KubernetesDeployment.png)
 #### Product Service
 - To simplify the setup, our product service will use embded H2 database.
 - To support customer filter, sort and search for products based on dynamic criterias, we have 2 options: *Spring Specification* and *QueryDSL*. Here we go with *QueryDSL* because it simplify the implementation.
@@ -116,3 +117,38 @@ We use *spring-cloud-starter-netflix-eureka-server* to start Eureka Server for s
 #### Order Service
 - A simple CRUD Service with *spring-boot-starter-data-rest* and backed by MongoDB. We use @RepositoryRestResource to expose resources without implementing controller/service.
 ### 5. Identifying and resolving bottlenecks
+To be updated
+## Software development principles
+To be updated
+## How to run the application
+To be updated
+## Project folder structure and Frameworks/Libraries
+### Project folder structure
+Based on above design, the project folder structure is organized following:
+- api-gateway: API Gateway
+- audit-service: Audit Service
+- external-files: external files
+- order-service: Order Service
+- product-service: Product Service
+- registry-service: Registry Service
+- shopping-cart-service: Shopping Cart Service
+### Frameworks/Libraries
+The Frameworks/Libraries used in the project and their purposes:
+- spring-cloud-starter-netflix-eureka-server : Eureka Server (Registry Service). This library allows services to find and communicate with each other without hard-coding hostname and port.
+- spring-cloud-starter-netflix-eureka-client : Eureka Client, for registering the service with Service Registry.
+- spring-cloud-starter-netflix-zuul : Zuul Proxy, turn our API Gateway into a reverse proxy.
+- spring-boot-starter-oauth2-resource-server: Starter for using Spring Security's OAuth2 resource server features, turn our API Gateway into a resource server.
+- spring-boot-starter-actuator : monitor and manage the application health.
+- spring-boot-starter-web : for building REST API.
+- spring-boot-starter-test : Starter for testing Spring Boot applications with libraries including JUnit, Hamcrest and Mockito.
+- spring-boot-starter-aop : for aspect-oriented programming with Spring AOP and AspectJ. We use this feature for implementing the customer audit feature.
+- spring-boot-starter-data-jpa: for using Spring Data JPA with Hibernate.
+- spring-boot-starter-data-mongodb: Starter for using MongoDB document-oriented database and Spring Data MongoDB.
+- spring-cloud-starter-stream-rabbit: Spring Cloud Starter Stream Rabbit, we use this to send and get message from RabbitMQ.
+- spring-boot-starter-data-rest: Starter for exposing Spring Data repositories over REST using Spring Data REST.
+- spring-boot-starter-data-redis: Starter for using Redis key-value data store with Spring Data Redis.
+- spring-boot-starter-validation: for using Java Bean Validation with Hibernate Validator.
+- spring-boot-starter-security: for using Spring Security.
+- spring-security-test: for the testing Spring Security.
+- modelmapper: to make object mapping easy, by automatically determining how one object model maps to another, based on conventions.
+- QueryDSL: build dynamic queries.
