@@ -1,3 +1,4 @@
+
 # icommerce
 Simple online shopping application to sell products (backend only).
 
@@ -123,6 +124,7 @@ We need API Gateway for following reasons:
 - Simplify application development by moving shared service functionality, such as the use of SSL certificates, from other parts of the application into the gateway. Other common services such as authentication, authorization, logging, monitoring, or throttling can be difficult to implement and manage across a large number of deployments. It may be better to consolidate this type of functionality, in order to reduce overhead and the chance of errors. Simpler configuration results in easier management and scalability and makes service upgrades simpler.
 ![Gateway Offload](external-files/gateway-offload.png)
 - Provide some consistency for request and response logging and monitoring.
+
 **Implementation:**
 - We use *spring-boot-starter-security* and *spring-boot-starter-oauth2-resource-server* to mark this service as a *resource server*. We also need to indicate how our application can obtain the public key necessary to validate the signature of the JWTs it receives as Bearer tokens by setting spring.security.oauth2.resourceserver.jwt.jwk-set-uri to Okta service.
 - We use *spring-cloud-netflix* to route the client request to our downstream services.
