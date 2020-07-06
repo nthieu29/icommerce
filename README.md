@@ -25,7 +25,7 @@ At a high-level, we need some following services (or components) to handle above
 - **Audit Service**: records all customers activities (filtering, sorting, viewing product detail).
 - **Shopping Cart Service**: manages customers shopping carts with CRUD operations.
 - **Order Service**: manages customer orders with CRUD operations.
-- **Authentication Service**: authenticates customer, integrates with 3rd party identity platform like Facebook, Google...
+- **Authentication Service**: authenticates customers, integrates with 3rd party identity platform like Facebook, Google...
 - **API Gateway**: Route requests to multiple services using a single endpoint. This service allows us to expose multiple services on a single endpoint and route to the appropriate service based on the request.
 ### 3. Defining data model
 In this part, we describes considerations for managing data in our architecture. For each service, we discuss data schema and datastore considerations.
@@ -82,5 +82,22 @@ Because the order data is simple and not relational, a document-oriented databas
 
 ![Order Schema](external-files/Order.png)
 ### 4. Detailed design
-
+![Detailed Design](external-files/DetailedDesign.png)
+#### Authentication Service
+To simplify the setup, here we use [Okta](https://www.okta.com/products/customer-identity/authentication/) - an Identity Cloud Service, and it provides us some benefits:
+- Single point to authenticate our customers: simplify our downstream microservice, these services just need to verify/validate the access token of users.
+- Store data about our customer: In ecommerce application, we will need these data to send marketing/promotion emails...
+- Perform almost popular social logins: Now we need support "Login with Facebook" only, but in the future maybe we need Google, LinkedIn...And we don't want to update all our downstream microservices to support more social logins. To simplify the process, we don't config Okta use Facebook Social Login, we login by username/password instead.
+In the case we don't want to use cloud service, we could use Keycloak - an open source identity solution provides the same capacities.
+#### API Gateway
+We need API Gateway for following reasons:
+- When a client needs to consume multiple services, setting up a separate endpoint for each service and having the client manage each endpoint can be challenging. Each service has a different API that the client must interact with, and the client must know about each endpoint in order to connect to the services. If an API changes, the client must be updated as well. If we refactor a service into two or more separate services, the code must change in both the service and the client.
+- Simplify application development by moving shared service functionality, such as the use of SSL certificates, from other parts of the application into the gateway. Other common services such as authentication, authorization, logging, monitoring, or throttling can be difficult to implement and manage across a large number of deployments. It may be better to consolidate this type of functionality, in order to reduce overhead and the chance of errors. Simpler configuration results in easier management and scalability and makes service upgrades simpler.
+![Gateway Offload](external-files/gateway-offload.png)
+- Provide some consistency for request and response logging and monitoring.
+#### Registry Service
+#### Product Service
+#### Audit Service
+#### Shopping Cart Service
+#### Order Service
 ### 5. Identifying and resolving bottlenecks
