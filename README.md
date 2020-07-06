@@ -21,6 +21,7 @@ Simple online shopping application to sell products (backend only).
 - [Software development principles](#software-development-principles)
 - [How to run the application](#how-to-run-the-application)
 - [API Documentation](#api-documentation)
+- [Application default configuration](#application-default-configuration)
 - [Project folder structure and Frameworks, Libraries](#project-folder-structure-and-frameworks-libraries)
   * [Project folder structure](#project-folder-structure)
   * [Frameworks and Libraries](#frameworks-and-libraries)
@@ -148,6 +149,8 @@ To be updated
 ## How to run the application
 To be updated
 ## API Documentation
+To be updated
+## Application default configuration
 To be updated
 ## Project folder structure and Frameworks, Libraries
 ### Project folder structure
