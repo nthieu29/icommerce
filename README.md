@@ -83,6 +83,7 @@ Because the order data is simple and not relational, a document-oriented databas
 ![Order Schema](external-files/Order.png)
 ### 4. Detailed design
 ![Detailed Design](external-files/DetailedDesign.png)
+In this section, we go though all our services in detail.
 #### Authentication Service
 To simplify the setup, here we use [Okta](https://www.okta.com/products/customer-identity/authentication/) - an Identity Cloud Service, and it provides us some benefits:
 - Single point to authenticate our customers: simplify our downstream microservice, these services just need to verify/validate the access token of users.
@@ -95,7 +96,12 @@ We need API Gateway for following reasons:
 - Simplify application development by moving shared service functionality, such as the use of SSL certificates, from other parts of the application into the gateway. Other common services such as authentication, authorization, logging, monitoring, or throttling can be difficult to implement and manage across a large number of deployments. It may be better to consolidate this type of functionality, in order to reduce overhead and the chance of errors. Simpler configuration results in easier management and scalability and makes service upgrades simpler.
 ![Gateway Offload](external-files/gateway-offload.png)
 - Provide some consistency for request and response logging and monitoring.
+**Implementation:**
+- We use *spring-boot-starter-security* and *spring-boot-starter-oauth2-resource-server* to mark this service as a *resource server*. We also need to indicate how our application can obtain the public key necessary to validate the signature of the JWTs it receives as Bearer tokens by setting spring.security.oauth2.resourceserver.jwt.jwk-set-uri to Okta service.
+- We use *spring-cloud-netflix* to route the client request to our downstream services.
+- When user successfully authenticated, we use ZuulFilter to add custom HTTP Header "Username" to client request. We could extract more information from JWT token (like user group - ADMIN, USER...) and add them as HTTP Header but for simplicity, we skip it for now.
 #### Registry Service
+We use *spring-cloud-starter-netflix-eureka-server* to start Eureka Server for service registration and discovery in our system. It helps API Gateway routing requests by service name instead of hard-code URL. But if we deploy our system to Kubernetes, we don't need this anymore because Kubernetes provides Service discovery and load balancing out-of-box.
 #### Product Service
 #### Audit Service
 #### Shopping Cart Service
