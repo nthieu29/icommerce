@@ -1,6 +1,31 @@
 # icommerce
 Simple online shopping application to sell products (backend only).
 
+- [System Design](#system-design)
+  * [1. Requirements](#1-requirements)
+  * [2. High-level design](#2-high-level-design)
+  * [3. Defining data model](#3-defining-data-model)
+    + [Product Service](#product-service)
+    + [Audit Service](#audit-service)
+    + [Shopping Cart Service](#shopping-cart-service)
+    + [Order Service](#order-service)
+  * [4. Detailed design](#4-detailed-design)
+    + [Authentication Service](#authentication-service)
+    + [API Gateway](#api-gateway)
+    + [Registry Service](#registry-service)
+    + [Product Service](#product-service-1)
+    + [Audit Service](#audit-service-1)
+    + [Shopping Cart Service](#shopping-cart-service-1)
+    + [Order Service](#order-service-1)
+  * [5. Identifying and resolving bottlenecks](#5-identifying-and-resolving-bottlenecks)
+- [Software development principles](#software-development-principles)
+- [How to run the application](#how-to-run-the-application)
+- [API Documentation](#api-documentation)
+- [Project folder structure and Frameworks, Libraries](#project-folder-structure-and-frameworks-libraries)
+  * [Project folder structure](#project-folder-structure)
+  * [Frameworks and Libraries](#frameworks-and-libraries)
+
+
 ## System Design
 
 ### 1. Requirements
@@ -122,7 +147,9 @@ To be updated
 To be updated
 ## How to run the application
 To be updated
-## Project folder structure and Frameworks/Libraries
+## API Documentation
+To be updated
+## Project folder structure and Frameworks, Libraries
 ### Project folder structure
 Based on above design, the project folder structure is organized following:
 - api-gateway: API Gateway
@@ -132,7 +159,7 @@ Based on above design, the project folder structure is organized following:
 - product-service: Product Service
 - registry-service: Registry Service
 - shopping-cart-service: Shopping Cart Service
-### Frameworks/Libraries
+### Frameworks and Libraries
 The Frameworks/Libraries used in the project and their purposes:
 - spring-cloud-starter-netflix-eureka-server : Eureka Server (Registry Service). This library allows services to find and communicate with each other without hard-coding hostname and port.
 - spring-cloud-starter-netflix-eureka-client : Eureka Client, for registering the service with Service Registry.
