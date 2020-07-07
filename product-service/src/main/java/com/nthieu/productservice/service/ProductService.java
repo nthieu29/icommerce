@@ -41,7 +41,7 @@ public class ProductService {
 
     private void trackPriceChange(Product newProduct) {
         Product oldProduct = productRepository.findById(newProduct.getId()).orElseThrow();
-        if (!newProduct.getPrice().equals(oldProduct.getPrice())) {
+        if (newProduct.getPrice().compareTo(oldProduct.getPrice()) != 0) {
             ProductPriceHistory productPriceHistory = new ProductPriceHistory(oldProduct, newProduct.getPrice());
             priceRepository.save(productPriceHistory);
         }

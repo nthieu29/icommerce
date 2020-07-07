@@ -33,10 +33,10 @@ public class ProductPriceHistory {
     @Column(name = "color", nullable = false)
     private String color;
 
-    @Column(name = "price", nullable = false, precision = 9, scale = 2)
-    private BigDecimal price;
+    @Column(name = "old_price", nullable = false, precision = 9, scale = 2)
+    private BigDecimal oldPrice;
 
-    @Column(name = "newPrice", nullable = false, precision = 9, scale = 2)
+    @Column(name = "new_Price", nullable = false, precision = 9, scale = 2)
     private BigDecimal newPrice;
 
     @Column(name = "updated_on", nullable = false, columnDefinition = "TIMESTAMP")
@@ -52,7 +52,7 @@ public class ProductPriceHistory {
         this.name = product.getName();
         this.brand = product.getBrand();
         this.color = product.getColor();
-        this.price = product.getPrice();
+        this.oldPrice = product.getPrice();
         this.newPrice = newPrice;
     }
 
