@@ -141,9 +141,9 @@ We use *spring-cloud-starter-netflix-eureka-server* to start Eureka Server for s
 ![Kubernetes](external-files/KubernetesDeployment.png)
 
 #### Product Service
-- To simplify the setup, our product service will use embded H2 database.
+- As we mentioned above, our Product Service will use Postgres as a relational database.
 - To support customer filter, sort and search for products based on dynamic criterias, we have 2 options: *Spring Specification* and *QueryDSL*. Here we go with *QueryDSL* because it simplify the implementation.
-- To keep track all customer activity, we need to records all customer request parameters when client send GET request to our endpoint to view product detail or to filtering/sorting products. We use *Spring AOP* and define the PointCut to tell Spring which part of the code should be monitored, we also define Advice method to tell Spring how to record these parameters.
+- To keep track all customer activity, we need to record all customer request parameters when client send GET request to our endpoint to view product detail or to filtering/sorting products. We use *Spring AOP* and define the PointCut to tell Spring which part of the code should be monitored, we also define Advice method to tell Spring how to record these parameters.
 - To make sure failure to store customer activity is completely transparent to customer and should have no impact to the activity itself, we use *Spring Async* to run our AOP Advice in a separate thread.
 - We use *Spring Cloud Stream* to send all customer activity data from Product Service to a message broker (to simplify the setup, here we use CloudAMQP - a cloud RabbitMQ service). In our case, Product Service acts as a message *Source*, and Audit Service acts as a message *Sink*. We don't want data will not be lost if Audit Service was temporary down, so we config queue as durable queue for guaranteed message delivery.
 
@@ -162,15 +162,49 @@ To be updated
 ## Software development principles
 To be updated
 
+## Application default configuration
+To make it easier for development process, we still expose these ports on the local machine to send request directly with services or to view actual data in the data stores. 
+In production environment, we leverage the infrastructure to make the downstream services become unreachable from the client, we only expose one single point - API Gateway.
+
+| Service               | Port |
+| --------------------- | ---- |
+| api-gateway           | 8080 |
+| audit-service         | 8081 |
+| order-service         | 8082 |
+| product-service       | 8083 |
+| registry-service      | 8761 |
+| shopping-cart-service | 8084 |
+| postgres              | 5432 |
+| mongo                 | 27017|
+| redis                 | 6379 |
+
+_Note_: for development purpose, we could bypass authentication by adding "Username: ```<your-test-username>```" to HTTP Header when we send request to downstream services.
+
 ## How to run the application
-To be updated
+### Setup development workspace
+The setup development workspace process is simpler than ever with following steps:
+1. Install [JDK 11](https://www.oracle.com/java/technologies/javase-jdk11-downloads.html).
+1. Install [Docker for Desktop](https://www.docker.com/products/docker-desktop).
+1. Install [Maven](https://maven.apache.org/download.cgi?Preferred=ftp://mirror.reverse.net/pub/apache/).
+1. Clone this project to your local machine.
+1. Open terminal and make sure you're at the root directory of this project, run the command ```docker-compose up``` (this will automatically setup Postgres, MongoDB and Redis for you).
+
+That's all.
+
+### Run a microservice
+You can run Spring Boot microservice in different ways, but first make sure you are in the root directory of the microservice you want to run:
+- Run jar file (of course you need to build it first): ```mvn install && java -jar target/<service-name>-0.0.1-SNAPSHOT.jar```
+- Run with Spring Boot: ```mvn spring-boot:run```
 
 ## API Documentation
+From the client's point of view, all the requests will be handled by only one single point - our API Gateway.
+
 Please refer [iCommerce API Documentation](https://documenter.getpostman.com/view/1885209/T17J7mB1?version=latest) for full request endpoint, HTTP Headers and request payload with example requests and responses.
 
-You could use cURL or Postman in your flavour. For Postman, you could click "Run in Postman" to import Postman Collection to your Postman on your local machine.
-## Application default configuration
-To be updated
+Note that **all requests need JWT Access Token** (by adding "Authorization" to HTTP Header with value "Bearer ```<JWT Access Token>```").
+
+You could use cURL or Postman or any tools in your flavor. Here we recommend using Postman because it makes things easier.
+For Postman configuration and demo login credentials, please refer [How to configure Postman to use iCommerce API](https://github.com/nthieu29/icommerce/wiki/How-to-configure-Postman-to-use-iCommerce-API).
 
 ## Project folder structure and Frameworks, Libraries
 ### Project folder structure
@@ -182,6 +216,12 @@ Based on above design, the project folder structure is organized following:
 - product-service: Product Service
 - registry-service: Registry Service
 - shopping-cart-service: Shopping Cart Service
+
+For each microservice, we will follow common 4 layers architecture:
+- **Controller**: Handle HTTP request from client, invoke appropriate methods in service layer, return the result to client.
+- **Service**: All business logic here. Data related calculations and all.
+- **DAO**: Data Access Object - all the Database related operations are done here.
+- **Entity**: persistent domain object -  table in Databases.
 
 ### Frameworks and Libraries
 The Frameworks/Libraries used in the project and their purposes:
