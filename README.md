@@ -220,7 +220,7 @@ Based on above design, the project folder structure is organized following:
 For each microservice, we will follow common 4 layers architecture:
 - **Controller**: Handle HTTP request from client, invoke appropriate methods in service layer, return the result to client.
 - **Service**: All business logic here. Data related calculations and all.
-- **DAO**: Data Access Object - all the Database related operations are done here.
+- **Repository**: all the Database related operations are done here.
 - **Entity**: persistent domain object -  table in Databases.
 
 ### Frameworks and Libraries
