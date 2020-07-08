@@ -243,3 +243,14 @@ The Frameworks/Libraries used in the project and their purposes:
 - spring-security-test: for the testing Spring Security.
 - modelmapper: to make object mapping easy, by automatically determining how one object model maps to another, based on conventions.
 - QueryDSL: build dynamic queries.
+
+### References
+- [Designing a microservices architecture](https://docs.microsoft.com/en-us/azure/architecture/microservices/design/) - *Azure Architecture Center | Microsoft Docs*
+- [Cloud design patterns](https://docs.microsoft.com/en-us/azure/architecture/patterns/) - *Azure Architecture Center | Microsoft Docs*
+- [The System Design Primer](https://github.com/donnemartin/system-design-primer)
+
+### Other projects
+Some of my other projects which you may be interested in:
+- [covid-tracker](https://github.com/nthieu29/covid-tracker) - Track COVID-19 local and global coronavirus cases with active, recoveries and death in a simple, elegant UI.
+- [build-your-own-data-structure](https://github.com/nthieu29/build-your-own-data-structure) - Building your own data structure.
+- [little-tunnel](https://github.com/nthieu29/little-tunnel) - Simple, efficient and easy to use local proxy which help you visit websites blocked by your ISP.
