@@ -160,7 +160,39 @@ We use *spring-cloud-starter-netflix-eureka-server* to start Eureka Server for s
 To be updated
 
 ## Software development principles
-To be updated
+### KISS (Keep It Simple Stupid)
+- Most systems work best if they are kept simple rather than made complex.
+- Less code takes less time to write, has less bugs, and is easier to modify.
+> The best design is the simplest one that works - Albert Einstein.
+
+### YAGNI (You aren't gonna need it)
+- Don't implement something until it is necessary.
+- Any work that's only used for a feature that's needed tomorrow, means losing effort from features that need to be done for the current iteration.
+- Always implement things when you actually need them, never when you just foresee that you need them.
+
+### Separation of Concerns
+- Separating a system into multiple distinct microservices, such that each service addresses a separate concern (product, order, shopping cart...).
+- In each service, break program functionality into separate layers (as show in [Project folder structure](#project-folder-structure)).
+
+### DRY
+- Put business rules, long expressions, if statements, math formulas, metadata, etc. in only one place.
+
+### Code For The Maintainer
+- Maintenance is by far the most expensive phase of any project.
+- Always code as if the person who ends up maintaining your code is a violent psychopath who knows where you live.
+- Always code and comment in such a way that if someone a few notches junior picks up the code, they will take pleasure in reading and learning from it.
+
+### Avoid Premature Optimization
+- It is unknown upfront where the bottlenecks will be.
+- After optimization, it might be harder to read and thus maintain.
+- Don't optimize until you need to, and only after profiling you discover a bottleneck optimise that.
+
+### Minimise Coupling
+- Eliminate, minimise, and reduce complexity of necessary relationships.
+- By hiding implementation details, coupling is reduced.
+
+### Inversion of Control
+
 
 ## Application default configuration
 To make it easier for development process, we still expose these ports on the local machine to send request directly with services or to view actual data in the data stores. 
