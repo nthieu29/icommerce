@@ -2,44 +2,47 @@
 # icommerce
 Simple online shopping application to sell products (backend only).
 
-* [System Design](#system-design)
-    + [1. Requirements](#1-requirements)
-    + [2. High-level design](#2-high-level-design)
-    + [3. Defining data model](#3-defining-data-model)
-      - [Product Service](#product-service)
-      - [Audit Service](#audit-service)
-      - [Shopping Cart Service](#shopping-cart-service)
-      - [Order Service](#order-service)
-    + [4. Detailed design](#4-detailed-design)
-      - [Authentication Service](#authentication-service)
-      - [API Gateway](#api-gateway)
-      - [Registry Service](#registry-service)
-      - [Product Service](#product-service-1)
-      - [Audit Service](#audit-service-1)
-      - [Shopping Cart Service](#shopping-cart-service-1)
-      - [Order Service](#order-service-1)
-    + [5. Identifying and resolving bottlenecks](#5-identifying-and-resolving-bottlenecks)
-  * [Software development principles](#software-development-principles)
-    + [KISS (Keep It Simple Stupid)](#kiss-keep-it-simple-stupid)
-    + [YAGNI (You aren't gonna need it)](#yagni-you-arent-gonna-need-it)
-    + [Separation of Concerns](#separation-of-concerns)
-    + [DRY](#dry)
-    + [Code For The Maintainer](#code-for-the-maintainer)
-    + [Avoid Premature Optimization](#avoid-premature-optimization)
-    + [Minimise Coupling](#minimise-coupling)
-    + [Inversion of Control](#inversion-of-control)
-    + [Single Responsibility Principle](#single-responsibility-principle)
-  * [Design Patterns](#design-patterns)
-  * [Application default configuration](#application-default-configuration)
-  * [How to run the application](#how-to-run-the-application)
-    + [Setup development workspace](#setup-development-workspace)
-    + [Run a microservice](#run-a-microservice)
-  * [API Documentation](#api-documentation)
-  * [Project folder structure and Frameworks, Libraries](#project-folder-structure-and-frameworks-libraries)
-    + [Project folder structure](#project-folder-structure)
-    + [Frameworks and Libraries](#frameworks-and-libraries)
-  * [References](#references)
-  * [Other projects](#other-projects)
+- [System Design](#system-design)
+  - [1. Requirements](#1-requirements)
+  - [2. High-level design](#2-high-level-design)
+  - [3. Defining data model](#3-defining-data-model)
+    - [Product Service](#product-service)
+    - [Audit Service](#audit-service)
+    - [Shopping Cart Service](#shopping-cart-service)
+    - [Order Service](#order-service)
+  - [4. Detailed design](#4-detailed-design)
+    - [Authentication Service](#authentication-service)
+    - [API Gateway](#api-gateway)
+    - [Registry Service](#registry-service)
+    - [Product Service](#product-service)
+    - [Audit Service](#audit-service)
+    - [Shopping Cart Service](#shopping-cart-service)
+    - [Order Service](#order-service)
+  - [5. Monitoring](#5-monitoring)
+  - [6. Identifying and resolving single point of failures and bottlenecks](#6-identifying-and-resolving-single-point-of-failures-and-bottlenecks)
+    - [Single point of failure](#single-point-of-failure)
+    - [Bottlenecks](#bottlenecks)
+- [Software development principles](#software-development-principles)
+  - [KISS (Keep It Simple Stupid)](#kiss-keep-it-simple-stupid)
+  - [YAGNI (You aren't gonna need it)](#yagni-you-arent-gonna-need-it)
+  - [Separation of Concerns](#separation-of-concerns)
+  - [DRY](#dry)
+  - [Code For The Maintainer](#code-for-the-maintainer)
+  - [Avoid Premature Optimization](#avoid-premature-optimization)
+  - [Minimise Coupling](#minimise-coupling)
+  - [Inversion of Control](#inversion-of-control)
+  - [Single Responsibility Principle](#single-responsibility-principle)
+- [Design Patterns](#design-patterns)
+- [Application default configuration](#application-default-configuration)
+- [How to run the application](#how-to-run-the-application)
+  - [Setup development workspace](#setup-development-workspace)
+  - [Run a microservice](#run-a-microservice)
+- [API Documentation](#api-documentation)
+- [Project folder structure and Frameworks, Libraries](#project-folder-structure-and-frameworks-libraries)
+  - [Project folder structure](#project-folder-structure)
+  - [Frameworks and Libraries](#frameworks-and-libraries)
+- [References](#references)
+- [Other projects](#other-projects)
 
 ## System Design
 
@@ -181,18 +184,27 @@ In any complex application, at some point something will go wrong. In a microser
 
 We have many different available solutions for monitoring: Cloud Providers (AWS CloudWatch, Azure Monitor...). In the case we want to go with cloud solution, we could use Graylog (refer [kubernetes-logging-setup](https://github.com/nthieu29/kubernetes-logging-setup)) for centralized log management and Prometheus, Grafana for metrics. The setup, configuration and integrate with Spring Boot is straightforward.
 
-### 6. Identifying and resolving bottlenecks
+### 6. Identifying and resolving single point of failures and bottlenecks
+
+- **Redundancy** is the duplication of critical components or functions of a system with the intention of increasing the reliability of the system. Redundancy plays a key role in removing the single points of failure in the system and provides backups if needed in a crisis
+- **Replication** means sharing information to ensure consistency between redundant resources to improve reliability, fault-tolerance, or accessibility. Replication is widely used in many database management systems (DBMS), usually with a primary-replica relationship between the original and the copies. The primary server gets all the updates, which then ripple through to the replica servers. Each replica outputs a message stating that it has received the update successfully, thus allowing the sending of subsequent updates. We could use replication to avoid the cases like: instance of Redis goes down and our customers lose all their shopping cart data...
+
+![Redundancy](external-files/RedundancyReplication.PNG)
+
 #### Single point of failure
-We could eliminate the single point of failure in our system by redundancy and replication:
-- Redundancy is the duplication of critical components or functions of a system with the intention of increasing the reliability of the system.
-- Replication: means sharing information to ensure consistency between redundant resources to improve reliability, fault-tolerance, or accessibility.
+We have 2 single points of failure in our system and they could be eliminated with redundancy:
 
-![Redundancy](external-files/RedundancyReplication.png)
+- *Registry Service*: if the Registry Service went down, all our services went down (because our API Gateway can not get service information/path for request routing). If we want to have high availability of the system, we need to made this service redundancy by having multiple replicas of this services running in the system.
+- *API Gateway*: similar with Registry Service above.
 
-We have 2 single points of failure in our system:
+#### Bottlenecks
+Solving this problem takes an iterative approach of:
+1. Benchmark/Load Test.
+1. Profile for bottlenecks.
+1. Address bottlenecks while evaluating alternatives and trade-offs.
+1. Repeat.
 
-- Registry Service: if the Registry Service went down, all our services went down (because our API Gateway can not get service information/path for request routing). If we want to have high availability of the system, we need to made this service redundancy by having multiple replicas of this services running in the system.
-- API Gateway: similar with Registry Service above.
+We continue benchmarking and monitoring your system to address bottlenecks as they come up and scaling is an iterative process.
 
 ## Software development principles
 ### KISS (Keep It Simple Stupid)
