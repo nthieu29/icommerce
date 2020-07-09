@@ -2,31 +2,44 @@
 # icommerce
 Simple online shopping application to sell products (backend only).
 
-- [System Design](#system-design)
-  * [1. Requirements](#1-requirements)
-  * [2. High-level design](#2-high-level-design)
-  * [3. Defining data model](#3-defining-data-model)
-    + [Product Service](#product-service)
-    + [Audit Service](#audit-service)
-    + [Shopping Cart Service](#shopping-cart-service)
-    + [Order Service](#order-service)
-  * [4. Detailed design](#4-detailed-design)
-    + [Authentication Service](#authentication-service)
-    + [API Gateway](#api-gateway)
-    + [Registry Service](#registry-service)
-    + [Product Service](#product-service-1)
-    + [Audit Service](#audit-service-1)
-    + [Shopping Cart Service](#shopping-cart-service-1)
-    + [Order Service](#order-service-1)
-  * [5. Identifying and resolving bottlenecks](#5-identifying-and-resolving-bottlenecks)
-- [Software development principles](#software-development-principles)
-- [How to run the application](#how-to-run-the-application)
-- [API Documentation](#api-documentation)
-- [Application default configuration](#application-default-configuration)
-- [Project folder structure and Frameworks, Libraries](#project-folder-structure-and-frameworks-libraries)
-  * [Project folder structure](#project-folder-structure)
-  * [Frameworks and Libraries](#frameworks-and-libraries)
-
+* [System Design](#system-design)
+    + [1. Requirements](#1-requirements)
+    + [2. High-level design](#2-high-level-design)
+    + [3. Defining data model](#3-defining-data-model)
+      - [Product Service](#product-service)
+      - [Audit Service](#audit-service)
+      - [Shopping Cart Service](#shopping-cart-service)
+      - [Order Service](#order-service)
+    + [4. Detailed design](#4-detailed-design)
+      - [Authentication Service](#authentication-service)
+      - [API Gateway](#api-gateway)
+      - [Registry Service](#registry-service)
+      - [Product Service](#product-service-1)
+      - [Audit Service](#audit-service-1)
+      - [Shopping Cart Service](#shopping-cart-service-1)
+      - [Order Service](#order-service-1)
+    + [5. Identifying and resolving bottlenecks](#5-identifying-and-resolving-bottlenecks)
+  * [Software development principles](#software-development-principles)
+    + [KISS (Keep It Simple Stupid)](#kiss-keep-it-simple-stupid)
+    + [YAGNI (You aren't gonna need it)](#yagni-you-arent-gonna-need-it)
+    + [Separation of Concerns](#separation-of-concerns)
+    + [DRY](#dry)
+    + [Code For The Maintainer](#code-for-the-maintainer)
+    + [Avoid Premature Optimization](#avoid-premature-optimization)
+    + [Minimise Coupling](#minimise-coupling)
+    + [Inversion of Control](#inversion-of-control)
+    + [Single Responsibility Principle](#single-responsibility-principle)
+  * [Design Patterns](#design-patterns)
+  * [Application default configuration](#application-default-configuration)
+  * [How to run the application](#how-to-run-the-application)
+    + [Setup development workspace](#setup-development-workspace)
+    + [Run a microservice](#run-a-microservice)
+  * [API Documentation](#api-documentation)
+  * [Project folder structure and Frameworks, Libraries](#project-folder-structure-and-frameworks-libraries)
+    + [Project folder structure](#project-folder-structure)
+    + [Frameworks and Libraries](#frameworks-and-libraries)
+  * [References](#references)
+  * [Other projects](#other-projects)
 
 ## System Design
 
@@ -163,12 +176,15 @@ To be updated
 ### KISS (Keep It Simple Stupid)
 - Most systems work best if they are kept simple rather than made complex.
 - Less code takes less time to write, has less bugs, and is easier to modify.
-> The best design is the simplest one that works - Albert Einstein.
+- > The best design is the simplest one that works - Albert Einstein.
+
+**What applied:** Keep system design and the implementation code simple
 
 ### YAGNI (You aren't gonna need it)
 - Don't implement something until it is necessary.
 - Any work that's only used for a feature that's needed tomorrow, means losing effort from features that need to be done for the current iteration.
-- Always implement things when you actually need them, never when you just foresee that you need them.
+
+**What applied:** Always implement things when we actually need them, never when we just foresee that we need them.
 
 ### Separation of Concerns
 - Separating a system into multiple distinct microservices, such that each service addresses a separate concern (product, order, shopping cart...).
@@ -182,17 +198,35 @@ To be updated
 - Always code as if the person who ends up maintaining your code is a violent psychopath who knows where you live.
 - Always code and comment in such a way that if someone a few notches junior picks up the code, they will take pleasure in reading and learning from it.
 
+**What applied:** Comprehensive documentation, make the code clean, add comment for some special intentions.
+
 ### Avoid Premature Optimization
 - It is unknown upfront where the bottlenecks will be.
 - After optimization, it might be harder to read and thus maintain.
-- Don't optimize until you need to, and only after profiling you discover a bottleneck optimise that.
+
+**What applied:** Don't optimize until we need to, and only after profiling we discover a bottleneck optimise that.
 
 ### Minimise Coupling
 - Eliminate, minimise, and reduce complexity of necessary relationships.
 - By hiding implementation details, coupling is reduced.
 
-### Inversion of Control
+**What applied:** Encapsulation in OOP, DI in Spring.
 
+### Inversion of Control
+IoC inverts the flow of control as compared to traditional control flow (Don't call us, we'll call you).
+- In traditional programming: our custom code makes calls to a library.
+- IoC: framework make calls to our custom code.
+
+**What applied:** Spring IoC container with Constructor-Based Dependency Injection for main code and Field-Based Dependency Injection for test code.
+
+### Single Responsibility Principle
+Every class should have a single responsibility, and that responsibility should be entirely encapsulated by the class. Responsibility can be defined as a reason to change, so a class or module should have one, and only one, reason to change.
+
+**What applied:** break system into multiple services, each services has only one responsibility. In each services, break into multiple layers, each layers were broken into multiple classes, each class has only one reason to change.
+
+## Design Patterns
+- **Object Mother:** pattern is essentially a special case of the Factory pattern used for creating test objects. It provides one or more factory methods that each create an object in a specific, meaningful configuration ([ProductMother.java](product-service/src/test/java/com/nthieu/productservice/helper/ProductMother.java))
+- **Builder**: provide a flexible solution to object creation. ([Product.java](product-service/src/main/java/com/nthieu/productservice/entity/Product.java))
 
 ## Application default configuration
 To make it easier for development process, we still expose these ports on the local machine to send request directly with services or to view actual data in the data stores. 
@@ -276,12 +310,12 @@ The Frameworks/Libraries used in the project and their purposes:
 - modelmapper: to make object mapping easy, by automatically determining how one object model maps to another, based on conventions.
 - QueryDSL: build dynamic queries.
 
-### References
+## References
 - [Designing a microservices architecture](https://docs.microsoft.com/en-us/azure/architecture/microservices/design/) - *Azure Architecture Center | Microsoft Docs*
 - [Cloud design patterns](https://docs.microsoft.com/en-us/azure/architecture/patterns/) - *Azure Architecture Center | Microsoft Docs*
 - [The System Design Primer](https://github.com/donnemartin/system-design-primer)
 
-### Other projects
+## Other projects
 Some of my other projects which you may be interested in:
 - [covid-tracker](https://github.com/nthieu29/covid-tracker) - Track COVID-19 local and global coronavirus cases with active, recoveries and death in a simple, elegant UI.
 - [build-your-own-data-structure](https://github.com/nthieu29/build-your-own-data-structure) - Building your own data structure.
