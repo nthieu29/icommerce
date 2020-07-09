@@ -296,6 +296,8 @@ You can run Spring Boot microservice in different ways, but first make sure you 
 - Run jar file (of course you need to build it first): ```mvn install && java -jar target/<service-name>-0.0.1-SNAPSHOT.jar```
 - Run with Spring Boot: ```mvn spring-boot:run```
 
+**Note in product-service:** Because we use code generation feature in QueryDSL to generate Qclass (for dynamic query feature) for our entities. So you need to run ```mvn compile``` to generate these classes (refer [here](http://www.querydsl.com/static/querydsl/3.2.0/reference/html/ch03s03.html) for more details).
+
 ## API Documentation
 From the client's point of view, all the requests will be handled by only one single point - our API Gateway.
 
