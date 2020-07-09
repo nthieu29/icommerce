@@ -12,7 +12,7 @@ public class PersistenceAuditorAware implements AuditorAware<String> {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if (authentication == null || !authentication.isAuthenticated()) {
-            return Optional.of(null);
+            return Optional.empty();
         }
         String username = (String) authentication.getPrincipal();
         return Optional.of(username);
