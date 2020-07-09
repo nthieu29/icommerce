@@ -169,8 +169,30 @@ We use *spring-cloud-starter-netflix-eureka-server* to start Eureka Server for s
 #### Order Service
 - A simple CRUD Service with *spring-boot-starter-data-rest* and backed by MongoDB. We use @RepositoryRestResource to expose resources without implementing controller/service.
 
-### 5. Identifying and resolving bottlenecks
-To be updated
+### 5. Monitoring
+In any complex application, at some point something will go wrong. In a microservices application, we need to track what's happening across dozens or even hundreds of services. To make sense of what's happening, we must collect telemetry from the application. Telemetry can be divided into logs and metrics.
+
+- **Logs** are text-based records of events that occur while the application is running. They include things like application logs (trace statements) or web server logs. Logs are primarily useful for forensics and root cause analysis.
+
+- **Metrics** are numerical values that can be analyzed. We can use them to observe the system in real time (or close to real time), or to analyze performance trends over time. To understand the system holistically, we must collect metrics at various levels of the architecture, from the physical infrastructure to the application, including:
+     - **Node-level** metrics, including CPU, memory, network, disk, and file system usage. System metrics help us to understand resource allocation for each node in the cluster, and troubleshoot outliers.
+     - **Container** metrics. For containerized applications, we need to collect metrics at the container level, not just at the VM level.
+     - **Application** metrics. This includes any metrics that are relevant to understanding the behavior of a service. Some good examples in our case are response time, error rate,...
+
+We have many different available solutions for monitoring: Cloud Providers (AWS CloudWatch, Azure Monitor...). In the case we want to go with cloud solution, we could use Graylog (refer [kubernetes-logging-setup](https://github.com/nthieu29/kubernetes-logging-setup)) for centralized log management and Prometheus, Grafana for metrics. The setup, configuration and integrate with Spring Boot is straightforward.
+
+### 6. Identifying and resolving bottlenecks
+#### Single point of failure
+We could eliminate the single point of failure in our system by redundancy and replication:
+- Redundancy is the duplication of critical components or functions of a system with the intention of increasing the reliability of the system.
+- Replication: means sharing information to ensure consistency between redundant resources to improve reliability, fault-tolerance, or accessibility.
+
+![Redundancy](external-files/RedundancyReplication.png)
+
+We have 2 single points of failure in our system:
+
+- Registry Service: if the Registry Service went down, all our services went down (because our API Gateway can not get service information/path for request routing). If we want to have high availability of the system, we need to made this service redundancy by having multiple replicas of this services running in the system.
+- API Gateway: similar with Registry Service above.
 
 ## Software development principles
 ### KISS (Keep It Simple Stupid)
