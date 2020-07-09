@@ -2,31 +2,44 @@
 # icommerce
 Simple online shopping application to sell products (backend only).
 
-- [System Design](#system-design)
-  * [1. Requirements](#1-requirements)
-  * [2. High-level design](#2-high-level-design)
-  * [3. Defining data model](#3-defining-data-model)
-    + [Product Service](#product-service)
-    + [Audit Service](#audit-service)
-    + [Shopping Cart Service](#shopping-cart-service)
-    + [Order Service](#order-service)
-  * [4. Detailed design](#4-detailed-design)
-    + [Authentication Service](#authentication-service)
-    + [API Gateway](#api-gateway)
-    + [Registry Service](#registry-service)
-    + [Product Service](#product-service-1)
-    + [Audit Service](#audit-service-1)
-    + [Shopping Cart Service](#shopping-cart-service-1)
-    + [Order Service](#order-service-1)
-  * [5. Identifying and resolving bottlenecks](#5-identifying-and-resolving-bottlenecks)
-- [Software development principles](#software-development-principles)
-- [How to run the application](#how-to-run-the-application)
-- [API Documentation](#api-documentation)
-- [Application default configuration](#application-default-configuration)
-- [Project folder structure and Frameworks, Libraries](#project-folder-structure-and-frameworks-libraries)
-  * [Project folder structure](#project-folder-structure)
-  * [Frameworks and Libraries](#frameworks-and-libraries)
-
+* [System Design](#system-design)
+    + [1. Requirements](#1-requirements)
+    + [2. High-level design](#2-high-level-design)
+    + [3. Defining data model](#3-defining-data-model)
+      - [Product Service](#product-service)
+      - [Audit Service](#audit-service)
+      - [Shopping Cart Service](#shopping-cart-service)
+      - [Order Service](#order-service)
+    + [4. Detailed design](#4-detailed-design)
+      - [Authentication Service](#authentication-service)
+      - [API Gateway](#api-gateway)
+      - [Registry Service](#registry-service)
+      - [Product Service](#product-service-1)
+      - [Audit Service](#audit-service-1)
+      - [Shopping Cart Service](#shopping-cart-service-1)
+      - [Order Service](#order-service-1)
+    + [5. Identifying and resolving bottlenecks](#5-identifying-and-resolving-bottlenecks)
+  * [Software development principles](#software-development-principles)
+    + [KISS (Keep It Simple Stupid)](#kiss-keep-it-simple-stupid)
+    + [YAGNI (You aren't gonna need it)](#yagni-you-arent-gonna-need-it)
+    + [Separation of Concerns](#separation-of-concerns)
+    + [DRY](#dry)
+    + [Code For The Maintainer](#code-for-the-maintainer)
+    + [Avoid Premature Optimization](#avoid-premature-optimization)
+    + [Minimise Coupling](#minimise-coupling)
+    + [Inversion of Control](#inversion-of-control)
+    + [Single Responsibility Principle](#single-responsibility-principle)
+  * [Design Patterns](#design-patterns)
+  * [Application default configuration](#application-default-configuration)
+  * [How to run the application](#how-to-run-the-application)
+    + [Setup development workspace](#setup-development-workspace)
+    + [Run a microservice](#run-a-microservice)
+  * [API Documentation](#api-documentation)
+  * [Project folder structure and Frameworks, Libraries](#project-folder-structure-and-frameworks-libraries)
+    + [Project folder structure](#project-folder-structure)
+    + [Frameworks and Libraries](#frameworks-and-libraries)
+  * [References](#references)
+  * [Other projects](#other-projects)
 
 ## System Design
 
@@ -290,12 +303,12 @@ The Frameworks/Libraries used in the project and their purposes:
 - modelmapper: to make object mapping easy, by automatically determining how one object model maps to another, based on conventions.
 - QueryDSL: build dynamic queries.
 
-### References
+## References
 - [Designing a microservices architecture](https://docs.microsoft.com/en-us/azure/architecture/microservices/design/) - *Azure Architecture Center | Microsoft Docs*
 - [Cloud design patterns](https://docs.microsoft.com/en-us/azure/architecture/patterns/) - *Azure Architecture Center | Microsoft Docs*
 - [The System Design Primer](https://github.com/donnemartin/system-design-primer)
 
-### Other projects
+## Other projects
 Some of my other projects which you may be interested in:
 - [covid-tracker](https://github.com/nthieu29/covid-tracker) - Track COVID-19 local and global coronavirus cases with active, recoveries and death in a simple, elegant UI.
 - [build-your-own-data-structure](https://github.com/nthieu29/build-your-own-data-structure) - Building your own data structure.
