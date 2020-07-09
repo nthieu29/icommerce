@@ -194,7 +194,7 @@ We have many different available solutions for monitoring: Cloud Providers (AWS 
 #### Single point of failure
 We have 2 single points of failure in our system and they could be eliminated with redundancy:
 
-- *Registry Service*: if the Registry Service went down, all our services went down (because our API Gateway can not get service information/path for request routing). If we want to have high availability of the system, we need to made this service redundancy by having multiple replicas of this services running in the system.
+- *Registry Service*: if the Registry Service went down, all our services went down (because our API Gateway can not get service information/path for request routing). If we want to have high availability of the system, we need to made this service redundancy by having multiple replicas of this services running in the system. And this solution comes with tradeoff: we increase the complexity of the system, also the operation cost.
 - *API Gateway*: similar with Registry Service above.
 
 #### Bottlenecks
@@ -223,6 +223,7 @@ We continue benchmarking and monitoring your system to address bottlenecks as th
 ### Separation of Concerns
 - Separating a system into multiple distinct microservices, such that each service addresses a separate concern (product, order, shopping cart...).
 - In each service, break program functionality into separate layers (as show in [Project folder structure](#project-folder-structure)).
+- AOP to separate of cross-cutting concerns.
 
 ### DRY
 - Put business rules, long expressions, if statements, math formulas, metadata, etc. in only one place.
