@@ -302,7 +302,7 @@ You can run Spring Boot microservice in different ways, but first make sure you 
 ## API Documentation
 From the client's point of view, all the requests will be handled by only one single point - our API Gateway.
 
-Please refer [iCommerce API Documentation](https://documenter.getpostman.com/view/1885209/T17J7mB1?version=latest) for full request endpoint, HTTP Headers and request payload with example requests and responses.
+Please refer [iCommerce API Documentation](https://documenter.getpostman.com/view/1885209/Tzm3nxGk) for full request endpoint, HTTP Headers and request payload with example requests and responses.
 
 Note that **all requests need JWT Access Token** (by adding "Authorization" to HTTP Header with value "Bearer ```<JWT Access Token>```").
 
