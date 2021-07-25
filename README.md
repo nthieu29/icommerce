@@ -48,6 +48,7 @@ Simple online shopping application to sell products (backend only).
 
 ### 1. Requirements
 A small start-up named "iCommerce" wants to build a very simple online shopping application to sell their products. In order to get to the market quickly, they just want to build an MVP version with a very limited set of functionalities:
+
 a. The application is simply a simple web page that shows all products on which customers can filter, short and search for products based on different criteria such as name, price, brand, colour etc.
 
 b. All product prices are subject to change at any time and the company wants to keep track of it.
